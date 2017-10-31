@@ -123,12 +123,13 @@ Mat ImgUtil::displayPercentage(Mat &img){
     Mat imres=img.clone();
     int height = imres.size().height;
     //int width = imres.size().width;
-    int margin = 15;
-    int marginText = 5;
-    int textLength = 40;
+    float baseScale = (float) height / 500;
+    int margin = 15*baseScale;
+    int marginText = 5*baseScale;
+    float textLength = 50*baseScale;
     //define rect height as 1/20 of screen height
     int rectWide = height/15;
-    float scale = 0.8f;
+    float scale = (float) height/500;
 
     //assume we define region at bottom left corner
     Scalar_<double> yellowColor = Scalar(YELLOW_B, YELLOW_G, YELLOW_R);
@@ -143,7 +144,7 @@ Mat ImgUtil::displayPercentage(Mat &img){
     Point vRedText(vRed2.x + marginText, vRed1.y - marginText);
     rectangle(imres, vRed1, vRed2, redColor, FILLED, LINE_8);
     stream << fixed << setprecision(2) << ratioRed;
-    putText(imres, stream.str() + "%", vRedText, CV_FONT_HERSHEY_PLAIN, scale, redColor);
+    putText(imres, stream.str() + "%", vRedText, CV_FONT_HERSHEY_PLAIN, scale, redColor,1 , LINE_AA);
     stream.str("");
 
     //draw yellow box + text at middle
@@ -152,7 +153,7 @@ Mat ImgUtil::displayPercentage(Mat &img){
     Point vYellowText(vYellow2.x + marginText, vYellow1.y - marginText);
     rectangle(imres, vYellow1, vYellow2, yellowColor, FILLED, LINE_8);
     stream << fixed << setprecision(2) << ratioYellow;
-    putText(imres, stream.str() + "%", vYellowText, CV_FONT_HERSHEY_PLAIN, scale, yellowColor);
+    putText(imres, stream.str() + "%", vYellowText, CV_FONT_HERSHEY_PLAIN, scale, yellowColor,1 , LINE_AA);
     stream.str("");
 
     //draw black text at right
@@ -161,7 +162,7 @@ Mat ImgUtil::displayPercentage(Mat &img){
     Point vBlackText(vBlack2.x + marginText, vBlack1.y - marginText);
     rectangle(imres, vBlack1, vBlack2, blackColor, FILLED, LINE_8);
     stream << fixed << setprecision(2) << ratioBlack;
-    putText(imres, stream.str() + "%", vBlackText, CV_FONT_HERSHEY_PLAIN, scale, blackColor);
+    putText(imres, stream.str() + "%", vBlackText, CV_FONT_HERSHEY_PLAIN, scale, blackColor, 1, LINE_AA);
 
     return imres;
 }
