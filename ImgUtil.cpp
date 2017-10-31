@@ -106,6 +106,7 @@ Mat ImgUtil::displayPercentage(Mat &img){
     int height = imres.size().height;
     int width = imres.size().width;
     int margin = 20;
+    int marginText = 5;
     //define rect height as 1/20 of screen height
     int rectWide = height/15;
 
@@ -114,6 +115,10 @@ Mat ImgUtil::displayPercentage(Mat &img){
     regionColor = Scalar(0, 0, 0);
     Point v1(margin, margin+rectWide);
     Point v2(width - margin, margin);
+    Point vText(v1.x + marginText, v1.y - marginText);
     rectangle(imres, v1, v2, regionColor, FILLED, LINE_8);
+
+    String redText, yellowText, blackText;
+    putText(imres, "percent", vText, CV_FONT_HERSHEY_PLAIN, 1.0f, Scalar(YELLOW_B, YELLOW_G, YELLOW_R));
     return imres;
 }
