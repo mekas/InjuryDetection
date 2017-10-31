@@ -10,6 +10,8 @@
 #include <vector>
 #include <cmath>
 #include <iostream>
+#include <iomanip>
+#include <boost/format.hpp>
 
 using namespace std;
 using namespace cv;
@@ -39,13 +41,15 @@ private:
     vector<Point> scanRegion();
     vector<double> centroidDistance(Vec3b pixel);
     uint shortestCentroid(Vec3b pixel);
+    int freqRed, freqYellow, freqBlack, npixel;
+    float ratioRed, ratioYellow, ratioBlack;
 
 public:
     static const uint BLACK = 0;
     static const uint WHITE = 0xFFFFFF;
     Mat boundedThresholding(Mat &img, Mat &img_bound);
     ImgUtil();
-    static Mat displayPercentage(Mat &img);
+    Mat displayPercentage(Mat &img);
 };
 
 

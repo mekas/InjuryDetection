@@ -9,6 +9,10 @@ Mat ImgUtil::boundedThresholding(Mat &img, Mat &img_bound) {
     this->img=img;
     this->img_bound=img_bound;
 
+    this->freqYellow=0;
+    this->freqRed=0;
+    this->freqBlack=0;
+
     Mat imtest(img.size(), CV_8UC3);
     imtest=cv::Scalar(255,255,255);
 
@@ -19,17 +23,27 @@ Mat ImgUtil::boundedThresholding(Mat &img, Mat &img_bound) {
         uint cluster=this->shortestCentroid(pixel);
         switch (cluster){
             case 0:
+                //black case
                 imtest.at<Vec3b>(location) = this->centroid[0];
+                this->freqBlack++;
                 break;
             case 1:
+                //red case
                 imtest.at<Vec3b>(location) = this->centroid[1];
+                this->freqRed++;
                 break;
             case 2:
+                //yellow case
                 imtest.at<Vec3b>(location) = this->centroid[2];
+                this->freqYellow++;
                 break;
         }
     }
 
+    npixel = freqRed + freqYellow + freqBlack;
+    this->ratioBlack = (float) freqBlack *100 / npixel;
+    this->ratioYellow = (float) freqYellow *100/ npixel;
+    this->ratioRed = (float) freqRed *100/ npixel;
     //imshow("test", imtest);
     return imtest;
 }
@@ -51,6 +65,10 @@ ImgUtil::ImgUtil(){
     this->centroid.push_back(black_vec);
     this->centroid.push_back(red_vec);
     this->centroid.push_back(yellow_vec);
+
+    this->freqBlack = 0;
+    this->freqRed = 0;
+    this->freqYellow = 0;
 }
 
 bool ImgUtil::compareBlack(Vec3b vec) {
@@ -104,21 +122,46 @@ uint ImgUtil::shortestCentroid(Vec3b pixel) {
 Mat ImgUtil::displayPercentage(Mat &img){
     Mat imres=img.clone();
     int height = imres.size().height;
-    int width = imres.size().width;
-    int margin = 20;
+    //int width = imres.size().width;
+    int margin = 15;
     int marginText = 5;
+    int textLength = 40;
     //define rect height as 1/20 of screen height
     int rectWide = height/15;
+    float scale = 0.8f;
 
     //assume we define region at bottom left corner
-    Scalar_<double> regionColor;
-    regionColor = Scalar(0, 0, 0);
-    Point v1(margin, margin+rectWide);
-    Point v2(width - margin, margin);
-    Point vText(v1.x + marginText, v1.y - marginText);
-    rectangle(imres, v1, v2, regionColor, FILLED, LINE_8);
+    Scalar_<double> yellowColor = Scalar(YELLOW_B, YELLOW_G, YELLOW_R);
+    Scalar_<double> redColor = Scalar(RED_B, RED_G, RED_R);
+    Scalar_<double> blackColor = Scalar(BLACK_B, BLACK_G, BLACK_R);
 
-    String redText, yellowText, blackText;
-    putText(imres, "percent", vText, CV_FONT_HERSHEY_PLAIN, 1.0f, Scalar(YELLOW_B, YELLOW_G, YELLOW_R));
+    stringstream stream;
+
+    //draw red text at left
+    Point vRed1(margin, margin+rectWide);
+    Point vRed2(vRed1.x + rectWide, margin);
+    Point vRedText(vRed2.x + marginText, vRed1.y - marginText);
+    rectangle(imres, vRed1, vRed2, redColor, FILLED, LINE_8);
+    stream << fixed << setprecision(2) << ratioRed;
+    putText(imres, stream.str() + "%", vRedText, CV_FONT_HERSHEY_PLAIN, scale, redColor);
+    stream.str("");
+
+    //draw yellow box + text at middle
+    Point vYellow1(vRedText.x + textLength + margin, margin+rectWide);
+    Point vYellow2(vYellow1.x+ rectWide, margin);
+    Point vYellowText(vYellow2.x + marginText, vYellow1.y - marginText);
+    rectangle(imres, vYellow1, vYellow2, yellowColor, FILLED, LINE_8);
+    stream << fixed << setprecision(2) << ratioYellow;
+    putText(imres, stream.str() + "%", vYellowText, CV_FONT_HERSHEY_PLAIN, scale, yellowColor);
+    stream.str("");
+
+    //draw black text at right
+    Point vBlack1(vYellowText.x + textLength + margin, margin + rectWide);
+    Point vBlack2(vBlack1.x + rectWide, margin);
+    Point vBlackText(vBlack2.x + marginText, vBlack1.y - marginText);
+    rectangle(imres, vBlack1, vBlack2, blackColor, FILLED, LINE_8);
+    stream << fixed << setprecision(2) << ratioBlack;
+    putText(imres, stream.str() + "%", vBlackText, CV_FONT_HERSHEY_PLAIN, scale, blackColor);
+
     return imres;
 }

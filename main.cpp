@@ -23,7 +23,7 @@ int main() {
     ImgUtil img_util;
     Mat img_reg = IoUtil::read_image(photo_campur_reg);
     Mat imtest = img_util.boundedThresholding(img, img_reg);
-    Mat im_percentage =ImgUtil::displayPercentage(imtest);
+    Mat im_percentage =img_util.displayPercentage(imtest);
 
     imshow("input", img);
     //imshow("boundary", img_reg);
