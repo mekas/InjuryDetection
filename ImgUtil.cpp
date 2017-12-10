@@ -166,3 +166,23 @@ Mat ImgUtil::displayPercentage(Mat &img){
 
     return imres;
 }
+
+void ImgUtil::Vec3iToVec3b(Vec3i &vi, Vec3b &vb) {
+    //both vector must have the same size
+    for (int i = 0; i < 3; ++i) {
+        vb.val[i]=(uchar) vi.val[i];
+    }
+}
+
+Vec3b ImgUtil::uintToVec3b(uint &color) {
+    Vec3b colorVec3b;
+    colorVec3b[0] = static_cast<uchar>(color >> 16);
+    colorVec3b[1] = static_cast<uchar>((color >> 8) &0xff);
+    colorVec3b[2] = static_cast<uchar>(color & 0xff);
+    return colorVec3b;
+}
+
+uint ImgUtil::Vec3bToUint(Vec3b &colorVec) {
+    uint color = (colorVec.val[0] << 16) | (colorVec.val[1] << 8) | colorVec.val[2];
+    return 0;
+}

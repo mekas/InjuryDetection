@@ -14,8 +14,9 @@ Cluster::Cluster(const Mat &im, uint black, uint red, uint yellow) {
 
     //cast centroidRaw (uint) to centroid (in Vec3b)
     for (int i = 0; i < ImgUtil::CENTROID_SIZE; ++i) {
-        centroid.at(i)=uintToVec3b(centroidRaw[i]);
+        centroid.at(i)=ImgUtil::uintToVec3b(centroidRaw[i]);
     }
+    this->run();
 }
 
 /**
@@ -77,14 +78,6 @@ void Cluster::iteration() {
     updateCentroid();
 }
 
-Vec3b Cluster::uintToVec3b(uint color) {
-    Vec3b colorVec3b;
-    colorVec3b[0] = static_cast<uchar>(color >> 16);
-    colorVec3b[1] = static_cast<uchar>((color >> 8) &0xff);
-    colorVec3b[2] = static_cast<uchar>(color & 0xff);
-    return colorVec3b;
-}
-
 void Cluster::updateCentroid(){
     this->centroid.at(0)=this->updateCentroid(blackCluster);
     this->centroid.at(1)=this->updateCentroid(redCluster);
@@ -119,4 +112,8 @@ void Cluster::run() {
     while(distance >= numeric_limits<double>::epsilon()){
         iteration();
     }
+}
+
+vector<Vec3b> Cluster::getComputedCentroid() {
+    return this->centroid;
 }

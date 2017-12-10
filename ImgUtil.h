@@ -18,6 +18,7 @@ using namespace cv;
 
 class ImgUtil {
 private:
+    //constants
     static const uint YELLOW = 0x91663c;
     static const uint YELLOW_R = YELLOW >> 16;
     static const uint YELLOW_G = YELLOW >> 8 & 0x0000ff;
@@ -33,16 +34,18 @@ private:
     static const uint BLACK_G = BLACK_C >> 8 & 0x0000ff;
     static const uint BLACK_B = BLACK_C & 0x0000ff;
     static const uint BLACK_BGR = (BLACK_B) << 16 | (BLACK_G) << 8 | (BLACK_R);
-    static const uint CENTROID_SIZE = 3;
-    vector<Vec3b> centroid;
 
+    //variables
+    vector<Vec3b> centroid;
+    int freqRed, freqYellow, freqBlack, npixel;
+    float ratioRed, ratioYellow, ratioBlack;
     Mat img, img_bound;
+
+    //methods
     bool compareBlack(Vec3b vec);
     vector<Point> scanRegion();
     vector<double> centroidDistance(Vec3b pixel);
     uint shortestCentroid(Vec3b pixel);
-    int freqRed, freqYellow, freqBlack, npixel;
-    float ratioRed, ratioYellow, ratioBlack;
 
 public:
     static const uint BLACK = 0;
@@ -50,6 +53,10 @@ public:
     Mat boundedThresholding(Mat &img, Mat &img_bound);
     ImgUtil();
     Mat displayPercentage(Mat &img);
+    static const uint CENTROID_SIZE = 3;
+    static void Vec3iToVec3b(Vec3i &, Vec3b &);
+    static Vec3b uintToVec3b(uint &color);
+    static uint Vec3bToUint(Vec3b &color);
 };
 
 

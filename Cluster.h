@@ -15,6 +15,8 @@
 class Cluster {
 public:
     Cluster(const Mat &im, uint black, uint red, uint yellow);
+    vector<Vec3b> getComputedCentroid();
+
 private:
     //class variables
     Mat im; //local data structure to store image reference
@@ -25,7 +27,6 @@ private:
     vector<Point> blackCluster;
     vector<Point> redCluster;
     vector<Point> yellowCluster;
-    Vec3b uintToVec3b(uint color);
 
     //methods
     uint getClosestCentroid(int, int);
@@ -38,7 +39,6 @@ private:
     const uint BLACK_CLUSTER_ID = 0;
     const uint RED_CLUSTER_ID = 1;
     const uint YELLOW_CLUSTER_ID = 2;
-
 };
 
 
