@@ -19,9 +19,9 @@ int main() {
     string photo_campur_reg = "../foto_luka_gimp/luka_campur/1_region.png";
     string photo_out = "campur1_detect.png";
     cout << "Hello, World!" << std::endl;
-    Mat img = IoUtil::read_image(photo_campur);
+    Mat img = IoUtil::readImage(photo_campur);
     ImgUtil img_util;
-    Mat img_reg = IoUtil::read_image(photo_campur_reg);
+    Mat img_reg = IoUtil::readImage(photo_campur_reg);
     Mat imtest = img_util.boundedThresholding(img, img_reg);
     Mat im_percentage =img_util.displayPercentage(imtest);
 

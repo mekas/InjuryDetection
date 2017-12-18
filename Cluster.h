@@ -36,9 +36,9 @@ private:
     Vec3b updateCentroid(vector<Point> &);
 
     //constant
-    const uint BLACK_CLUSTER_ID = 0;
-    const uint RED_CLUSTER_ID = 1;
-    const uint YELLOW_CLUSTER_ID = 2;
+    static const uint BLACK_CLUSTER_ID = 0;
+    static const uint RED_CLUSTER_ID = 1;
+    static const uint YELLOW_CLUSTER_ID = 2;
 };
 
 

@@ -3,7 +3,7 @@
 //
 #include "IoUtil.h"
 
-vector<Mat> IoUtil::read_images(string path) {
+vector<Mat> IoUtil::readImages(string path) {
     vector <Mat> images;
 
     if(!exists(path) || !is_directory(path)){
@@ -29,7 +29,7 @@ vector<Mat> IoUtil::read_images(string path) {
     return images;
 }
 
-Mat IoUtil::read_image(string path) {
+Mat IoUtil::readImage(string path) {
     vector <Mat> images;
 
     if(!exists(path) || !is_regular_file(path)){
@@ -39,6 +39,16 @@ Mat IoUtil::read_image(string path) {
 
     Mat image = imread(path, IMREAD_COLOR);
     return image;
+}
+
+/**
+ * process image filename and generate image label filename
+ * @param filename image filename, extension included
+ * @return filename for image label included with extension
+ */
+string IoUtil::generateLabelPath(string filename) {
+    //strip extension
+    return std::__cxx11::string();
 }
 
 const vector <string> IoUtil::PERMITTED_EXTENSION= {".tif",".jpg",".jpeg",".png"};

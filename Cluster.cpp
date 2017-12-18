@@ -59,13 +59,13 @@ void Cluster::iteration() {
             uint centroidId = getClosestCentroid(i,j);
             clusterMember[i]=centroidId;
             switch(centroidId){
-                case BLACK_CLUSTER_ID:
+                case Cluster::BLACK_CLUSTER_ID:
                     blackCluster.emplace_back(Point(i,j));
                     break;
-                case RED_CLUSTER_ID:
+                case Cluster::RED_CLUSTER_ID:
                     redCluster.emplace_back(Point(i,j));
                     break;
-                case YELLOW_CLUSTER_ID:
+                case Cluster::YELLOW_CLUSTER_ID:
                     blackCluster.emplace_back(Point(i,j));
                     break;
             }
