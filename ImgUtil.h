@@ -12,6 +12,8 @@
 #include <iostream>
 #include <iomanip>
 #include <boost/format.hpp>
+#include "Util.h"
+#include "IoUtil.h"
 
 using namespace std;
 using namespace cv;
@@ -51,6 +53,7 @@ public:
     static const uint BLACK = 0;
     static const uint WHITE = 0xFFFFFF;
     Mat boundedThresholding(Mat &img, Mat &img_bound);
+    vector<Mat> boundedThresholding(vector<string> files, vector<string> &file_out);
     ImgUtil();
     Mat displayPercentage(Mat &img);
     static const uint CENTROID_SIZE = 3;

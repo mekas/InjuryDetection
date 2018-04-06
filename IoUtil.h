@@ -20,8 +20,9 @@ using namespace cv;
 class IoUtil {
 public:
     static vector<Mat> readImages(string path);
-    static string generateLabelPath(string filename);
+    static vector<string> readImagesAsString(string path);
     static Mat readImage(string filepath);
+    static void storeMatFiles(vector<string> paths, vector<Mat> images);
 private:
     static const vector <string> PERMITTED_EXTENSION;
 };

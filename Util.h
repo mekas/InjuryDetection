@@ -12,7 +12,10 @@ using namespace std;
 
 class Util {
 public:
-    static bool has(const vector <string> &vec, string p);
+    static bool has(const vector <string> &vec, const string &p);
+    static bool hasString(const string &part, const string &input);
+    static string getRegionFilename(string &input);
+    static string getOutputFilename(string &input);
 
 private:
     struct IsMatch;

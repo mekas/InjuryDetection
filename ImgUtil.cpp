@@ -5,6 +5,37 @@
 
 #include "ImgUtil.h"
 
+
+vector<Mat> ImgUtil::boundedThresholding(vector<string> files, vector<string> &files_out) {
+    Mat img, img_reg;
+    vector<Mat> result;
+    for(string file: files){
+        img = IoUtil::readImage(file);
+        string file_reg = Util::getRegionFilename(file);
+        try{
+            img_reg = IoUtil::readImage(file_reg);
+            cout << "Processing " << file << '\n';
+            //check size of im and img_reg
+            Size size_im = img.size();
+            Size size_imreg = img_reg.size();
+            if(size_im != size_imreg)
+                throw string("size of image and label is different!");
+
+            Mat img_cluster = boundedThresholding(img, img_reg);
+            Mat img_result = displayPercentage(img_cluster);
+            result.emplace_back(img_result);
+
+            //next record file out path
+            string file_out = Util::getOutputFilename(file);
+            files_out.emplace_back(file_out);
+        } catch (string &e){
+            cout << e << '\n';
+        }
+        cout << '\n';
+    }
+    return result;
+}
+
 Mat ImgUtil::boundedThresholding(Mat &img, Mat &img_bound) {
     this->img=img;
     this->img_bound=img_bound;
@@ -15,6 +46,11 @@ Mat ImgUtil::boundedThresholding(Mat &img, Mat &img_bound) {
 
     Mat imtest(img.size(), CV_8UC3);
     imtest=cv::Scalar(255,255,255);
+
+    //check size of im and img_reg
+    Size size_im = img.size();
+    Size size_imreg = img_bound.size();
+    assert(size_im == size_imreg);
 
     vector<Point> region = scanRegion();
     for(Point location: region){
@@ -44,6 +80,7 @@ Mat ImgUtil::boundedThresholding(Mat &img, Mat &img_bound) {
     this->ratioBlack = (float) freqBlack *100 / npixel;
     this->ratioYellow = (float) freqYellow *100/ npixel;
     this->ratioRed = (float) freqRed *100/ npixel;
+    cout << "red ratio: " << this->ratioRed << ", yellow ratio: " << this->ratioYellow << ", red ratio: " << this->ratioBlack << "\n";
     //imshow("test", imtest);
     return imtest;
 }
@@ -86,12 +123,13 @@ vector<Point> ImgUtil::scanRegion() {
 
     for (int i = 0; i < size.width; ++i) {
         for (int j = 0; j < size.height; ++j) {
+            //cout << j << '\n';
             Vec3b color = img_bound.at<Vec3b>(j,i);
             if(compareBlack(color)){
                 Point p;
                 p.x = i;
                 p.y = j;
-                region.push_back(p);
+                region.emplace_back(p);
             }
         }
     }
